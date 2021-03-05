@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const PostMessage = require('../models/postMessage');
 
@@ -31,8 +32,32 @@ router.post('/', async (req, res) => {
     }
 });
 
-router.patch('/:id', async (req,res) => {
+router.patch('/:id', async (req, res) => { //for updating documents
     const { id: _id } = req.params;
+    const post = req.body;
+    //checking if id is mongoose object id
+    if (!mongoose.Types.ObjectId.isValid(_id)) return res.status(404).send('No post with that id.');
+
+    const updatedPost = await PostMessage.findByIdAndUpdate(_id, { ...post, _id }, { new: true });
+    res.json(updatedPost);
 });
 
 module.exports = router;
+
+router.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+    //checking if id is mongoose object id
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id.');
+
+    await PostMessage.findByIdAndRemove(id);
+    res.json({ message: 'Post deleted' });
+});
+
+router.patch('/:id/like', async (req, res) => {
+    const { id } = req.params;
+    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send('No post with that id.');
+
+    const post = await PostMessage.findById(id);
+    const updated = await PostMessage.findByIdAndUpdate(id, { likeCount: post.likeCount+1}, { new: true });
+    res.json(updated);
+});
