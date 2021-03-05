@@ -23,11 +23,7 @@ app.use('/posts', postRoutes);
 
 
 //connecting to cloud atlas database and listening on port 
-<<<<<<< HEAD
-const CONNECTION_URL = 'mongodb+srv://ernisty:0cYaasdKV9k216X9@cluster0.d4f3b.mongodb.net/mycollection?retryWrites=true&w=majority';
-=======
 const CONNECTION_URL = 'mongodb+srv://ernisty:@cluster0.d4f3b.mongodb.net/<dbname>?retryWrites=true&w=majority';
->>>>>>> 263bc8d58c9ae47c8776a5439f3d8b25902e9ff1
 
 
 const PORT = process.env.port || 3001;
